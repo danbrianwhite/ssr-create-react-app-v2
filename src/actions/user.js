@@ -1,4 +1,11 @@
-import { SET, RESET } from '../types/user'
+import { REQUEST, SET, RESET } from '../types/user'
+
+export function request(id) {
+  return {
+    type: REQUEST,
+    id
+  }
+}
 
 export function set(payload){
   return {
@@ -12,4 +19,3 @@ export function reset(){
     type: RESET
   }
 }
-

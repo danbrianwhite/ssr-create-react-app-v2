@@ -7,13 +7,18 @@ Install
 -------
 ```bash
 npm install
-npm run build
-npm run start:server
 ```
 
 ### Development
-This just runs create react app, its great!
+This runs the create react app with hot reloading containers + reducers and the api backend
 ```bash
 npm start
+```
+
+### Production
+-------
+```bash
+npm run build
+npm run now-start
 ```
 

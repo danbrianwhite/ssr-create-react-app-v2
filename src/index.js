@@ -11,13 +11,22 @@ import App from './containers/App'
 const initialState = {}
 const store = configureStore(initialState)
 
-ReactDOM.render(
-  <Provider store={store}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </Provider>
-, document.getElementById('root')
-)
+const render = (Component) => {
+  ReactDOM.render(
+    <Provider store={store}>
+      <BrowserRouter>
+        <Component />
+      </BrowserRouter>
+    </Provider>,
+    document.getElementById('root')
+  )
+}
 
+render(App)
 
+if(process.env.NODE_ENV === 'development' && module.hot) {
+  module.hot.accept('./containers/App', () => {
+    const NewApp = require('./containers/App').default
+    render(NewApp)
+  })
+}

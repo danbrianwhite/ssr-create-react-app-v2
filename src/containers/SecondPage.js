@@ -7,6 +7,9 @@ import { Link } from 'react-router-dom'
 import './SecondPage.css'
 
 class SecondPage extends Component {
+  componentDidMount() {
+    this.props.userActions.request(1)
+  }
   render() {
     return (
       <div className='bold'>

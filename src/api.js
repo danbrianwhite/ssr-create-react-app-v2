@@ -7,8 +7,9 @@ class Api {
     if (!options){
       return
     }
-    const {token} = options
+    const {token, prefix} = options
     this.token = token
+    this.prefix = prefix
   }
   getJsonHeaders(){
     return {
@@ -34,11 +35,51 @@ class Api {
   _buildQueryString(data){
     return '?' + Object.keys(data).map(d=>d+'='+encodeURIComponent(data[d]))
   }
+  parseJson(res) {
+    return res.json()
+  }
+  checkStatus(res) {
+    if (res.status >= 200 && res.status < 300) {
+      return res
+    } else {
+      var error = new Error(res.statusText)
+      error.response = res
+      throw error
+    }
+  }
+  get(fixture, id) {
+    if(id) {
+      return fetch(`${this.apiUrl}${this.prefix}/${fixture}/${id}`, this.getJsonHeaders())
+        .then(this.checkStatus)
+        .then(this.parseJson)
+        .then(data => {
+          return {ok: true, data}
+        }).catch(err => {
+          return {ok: false, err}
+        })
+    } else {
+      return fetch(`${this.apiUrl}${this.prefix}/${fixture}`, this.getJsonHeaders())
+        .then(this.checkStatus)
+        .then(this.parseJson)
+        .then(data => {
+          return {ok: true, data}
+        }).catch(err => {
+          return {ok: false, err}
+        })
+    }
+  }
 }
 
-export class MainApi extends Api{
-  constructor(options){
-    super(options)
-    this.prefix = '/api'
+const create = (prefix = '/api') => {
+  const api = new Api({prefix})
+
+  const getUser = (id) => api.get('users', id)
+
+  return {
+    getUser
   }
+}
+
+export default {
+  create
 }
