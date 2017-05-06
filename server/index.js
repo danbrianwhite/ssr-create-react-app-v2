@@ -1,6 +1,6 @@
 const app = require('./app')
 
-const PORT = process.env.PORT || (process.env.NODE_ENV === 'production' ? 3000 : 3001)
+const PORT = process.env.PORT || 3001
 
 // Why don't I need http createServer
 app.listen(PORT, ()=>{
