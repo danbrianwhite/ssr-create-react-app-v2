@@ -22,7 +22,7 @@
     "redux-saga": "^0.15.0"
   },
   "scripts": {
-    "start": "./node_modules/.bin/concurrently \"npm run start:server\" \"npm run start:client\"",
+    "start": "concurrently 'npm run start:server' 'npm run start:client'",
     "start:client": "react-scripts start",
     "start:server": "NODE_ENV=development node server/index.js",
     "now-start": "NODE_ENV=production node server/index.js",
