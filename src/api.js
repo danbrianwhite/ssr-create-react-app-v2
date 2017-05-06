@@ -7,16 +7,15 @@ class Api {
     if (!options){
       return
     }
-    const {token, prefix} = options
+    const {token} = options
     this.token = token
-    this.prefix = prefix
   }
-  getJsonHeaders(){
+  _getJsonHeaders(){
     return {
       'Accept': 'application/json'
     }
   }
-  postJsonHeaders(){
+  _postJsonHeaders(){
     return {
       'Accept': 'application/json'
     , 'Content-Type': 'application/json'
@@ -25,61 +24,26 @@ class Api {
   setToken(token){
     this.token = token
   }
-  handleUnauthed(res){
-    if (res.status === 401) {
-      return new Promise(()=>{})
-    } else {
-      return res
-    }
-  }
   _buildQueryString(data){
     return '?' + Object.keys(data).map(d=>d+'='+encodeURIComponent(data[d]))
   }
-  parseJson(res) {
-    return res.json()
-  }
-  checkStatus(res) {
-    if (res.status >= 200 && res.status < 300) {
-      return res
-    } else {
-      var error = new Error(res.statusText)
-      error.response = res
-      throw error
+  // Don't want to be too opinionated here, just a basic one
+  _handleStatus(res){
+    if (res.ok){
+      return res.json()
     }
-  }
-  get(fixture, id) {
-    if(id) {
-      return fetch(`${this.apiUrl}${this.prefix}/${fixture}/${id}`, this.getJsonHeaders())
-        .then(this.checkStatus)
-        .then(this.parseJson)
-        .then(data => {
-          return {ok: true, data}
-        }).catch(err => {
-          return {ok: false, err}
-        })
-    } else {
-      return fetch(`${this.apiUrl}${this.prefix}/${fixture}`, this.getJsonHeaders())
-        .then(this.checkStatus)
-        .then(this.parseJson)
-        .then(data => {
-          return {ok: true, data}
-        }).catch(err => {
-          return {ok: false, err}
-        })
-    }
+    throw new Error(res.statusText)
   }
 }
 
-const create = (prefix = '/api') => {
-  const api = new Api({prefix})
-
-  const getUser = (id) => api.get('users', id)
-
-  return {
-    getUser
+export class MainApi{
+  constructor(options){
+    super(options)
+    this.prefix = '/api'
   }
-}
-
-export default {
-  create
+  getUser(id){
+    return fetch(`${this.apiUrl}${this.prefix}/users/${id}`, {
+      headers: this._getJsonHeaders()
+    }).then(this._handleStatus)
+  }
 }
