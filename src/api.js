@@ -36,7 +36,7 @@ class Api {
   }
 }
 
-export class MainApi{
+export class MainApi extends Api{
   constructor(options){
     super(options)
     this.prefix = '/api'
