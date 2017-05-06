@@ -10,7 +10,7 @@ npm install
 ```
 
 ### Development
-This runs the create react app with hot reloading containers + reducers and the api backend
+This runs Create React App with hot reloading containers and the api backend concurrently
 ```bash
 npm start
 ```
