@@ -1,8 +1,8 @@
 import { fork } from 'redux-saga/effects'
 import userSaga from './user'
-import API from '../api'
+import { MainApi } from '../api'
 
-const api = API.create()
+const api = new MainApi()
 
 export default function * rootSaga() {
   yield [
